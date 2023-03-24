@@ -1,0 +1,23 @@
+Package: SPADE
+Type: Package
+Title: Spatially Expressed Pattern Investication Method With Spatial Transcriptomics Data
+Version: 1.0
+Date: 2023-03-22
+Authors: Fei Qin, Feifei Xiao, Guoshuai Cai 
+Maintainer: Fei Qin <fqin@email.sc.edu>
+Description: We developed SPADE, a spatial pattern investigation method, to identify spatially expressed genes within groups and between groups using spatial transcriptomics data.
+License: GPL-3
+LazyData: TRUE
+Depends: 
+    R (>= 4.0),
+	mvtnorm,
+	stats
+URL: https://github.com/thecailab/SPADE
+RoxygenNote: 7.1.2
+VignetteBuilder: knitr
+Encoding: UTF-8
+Language: en-GB
+Imports: Rcpp (>= 1.0.8)
+LinkingTo: Rcpp, RcppArmadillo
+Suggests: 
+    rmarkdown
