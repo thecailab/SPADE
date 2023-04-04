@@ -5,7 +5,7 @@ Version: 1.0
 Date: 2023-03-22
 Authors: Fei Qin, Feifei Xiao, Guoshuai Cai 
 Maintainer: Fei Qin <fqin@email.sc.edu>
-Description: We developed SPADE, a spatial pattern investigation method, to identify spatially variable genes within groups and between groups using spatial transcriptomics data.
+Description: We developed SPADE, a spatial pattern investigation method, to identify spatially expressed genes within groups and between groups using spatial transcriptomics data.
 License: GPL-3
 LazyData: TRUE
 Depends: 

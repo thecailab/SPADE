@@ -1,18 +1,19 @@
 ---
-title: 'SPADE: a spatial pattern investigation method, to identify spatially expressed genes within groups and between 
-groups using spatial transcriptomics data.'
+title: 'SPADE: a spatial pattern and differential expression analysis method, 
+  to identify spatially expressed genes within groups and between'
 author: "Fei Qin, Feifei Xiao, Guoshuai Cai"
-date: 'Last updated: 03/23/2023'
+date: 'Last updated: 03/31/2023'
 output:
   pdf_document: default
   html_document:
     df_print: paged
 packages: SPADE
+fontsize: 12pt
 ---
 
 # 1. Introduction to the SPADE method
 
-To identify SE genes with spatially resolved transcriptomics data, the SPADE method was developed based on a GPR model, which can model the relationship between gene expression and other covariates (i.e., cell groups) incorporating the spatial information of multiple cells. SPADE was able to identify SE genes within a single group and between groups. The framework of the SPADE method is summarized and illustrated in Figure 1. First, original read counts data were normalized into continuous data. Second, instead of using a fixed length scale hyperparameter in the covariance kernel of GPR, SPADE estimated the optimal hyperparameter for each gene. To identify SE genes within groups, hypothesis testing was conducted based on a quadratic score statistic [13] with a Davies method [14] to compute the P value. With SE gene detection between groups, SPADE exchanged the optimal hyperparameters estimated in two groups and then utilized a crossed likelihood ratio test to calculate the P value for each gene. 
+To identify spatially expressed (SE) genes with spatially resolved transcriptomic data, the SPADE method was developed based on a Gaussian process regression (GPR) model with Gaussian kernel. GPR model can model the relationship between gene expression and other covariates (i.e., cell groups) incorporating the spatial information of multiple cells. Besides detecting SE genes within groups, SPADE also provided a framework to identify SE genes between different treatment conditions. The framework of the SPADE method is summarized and illustrated in Figure below. First, original read counts data were normalized into continuous data using a two-step normalization strategy. Second, instead of using a fixed length scale hyperparameter across genes in the kernel function of GPR model, SPADE estimated the optimal hyperparameter for each gene to improve the accuracy of SE gene identification. To identify SE genes within groups, hypothesis testing was conducted based on a quadratic score statistic with a Davies method to compute the P value. With SE gene detection between groups, SPADE exchanged the optimal hyperparameters estimated in two groups and then utilized a crossed likelihood ratio test to calculate the P value for each gene. 
 
 ![FLCNA framework](E:/DB/Dropbox/Qinfei/Research/Spatial scRNA/Code/SPADE_package/vignettes/Figure 1.png)
 
@@ -24,57 +25,69 @@ install_github("thecailab/SCRIP")
 ```
 
 # 3. Data
-To help explain 
+To help illustrate how SPADE package can be applied, the SeqFISH dataset was provided in this vignettes. The SeqFISH dataset was collected on the mouse hippocampus with 249 genes measured on 257 spots. After filtering out cells located at the boundary to relieve border artifacts, a final set of 249 genes measured on 131 spots were retained for the application. 
+
+```{r, message=FALSE, warning = FALSE}
+library(SPADE)
+data(SeqFISH)
+# data(info)
+# readcounts <- SeqFISH
+# 
+# dim(readcounts)
+# dim(info)
+```
+
+```{r, message=FALSE, warning = FALSE}
+# readcounts[1:5,1:5]
+# head(info)
+```
 
 # 4. Identifying SE genes within groups
 
+To characterize complex tissues with spatial transcriptomics, the identification of spatially expressed (SE) genes within groups is an essential first step. These identified SE genes can be defined as genes with uneven, aggregated, or patterned spatial distribution of gene expression magnitudes, and they play important role in biomarker discovery and drug development.
+    
 ## 4.1 Normalization
+
+A two-step normalization strategy was implemented to transformed original read counts data into continuous data. First, the mean-variance dependency was stabilized using an Anscombe’s transformation strategy. Second, a linear regression was utilized to regress out library size from the above transformed expression data. After this step, the normalized continuous data will be utilized for the parameter estimation and hypothesis testing in the SPADE method. 
+
+```{r, message=FALSE, warning = FALSE}
+# data_norm <- SPADE_norm(readcounts=readcounts, info=info)
+# data_norm[1:5,1:5]
+```
 
 ## 4.2 Parameter estimation 
 
+The GPR model was used to model the expression of each gene across cells with different locations. Theoretically, the problem of finding SE genes in the SPADE method is to test how well the candidate covariance matrix fits the spatial transcriptomic data. For each gene, we selected the optimal length-scale hyperparameter in the Gaussian kernel to increase the accuracy of SE gene identification. The kernel with optimal hyperparameter will be used in covariance matrix to test whether candidate gene is the significant gene with differential spatial pattern. SPDE_estimate() R function was used for the parameter estimation. 
+
+```{r, message=FALSE, warning = FALSE}
+# Est <- SPADE_estimate(expr_data=data_norm, info=info)
+# head(Est)
+```
+
 ## 4.3 Testing
+
+```{r, message=FALSE, warning = FALSE}
+# Test_res <- SPADE_test(object=data_norm, location=info, para=Est)
+# head(Test_res)
+# sum(Test_res$Adjust.Pvalue < 0.05)
+```
+
 
 
 # 5. Identifying SE genes between groups
 
+SPADE was the first method to investigate SE between groups with spatially resolved transcriptomic data. The identification of SE genes between groups was essential for understanding the changes of spatial patterns with different treatment conditions or different time phases. 
+
 ## 5.1 Normalization
+
+Still, the same two-step normalization strategy was implemented for read counts data from each group to transform original data into continuous data.
+
+```{r, message=FALSE, warning = FALSE}
+
+```
 
 ## 5.2 Parameter estimation and testing
 
+```{r, message=FALSE, warning = FALSE}
 
-A two-step median normalization approach is implemented to remove the effect of biases from the GC-content and mappability. We further calculate the ratio of normalized RC and its sample specific mean, and the logarithm transformation of this ratio (log2R) is used in the main step of the FLCNA method. FLCNA_normalization() R function is used for the normalization. 
-
-```{r, message=TRUE, warning = FALSE}
-log2Rdata <- FLCNA_normalization(Y=QCobject$Y, gc=QCobject$ref$gc, map=QCobject$ref$mapp)
 ```
-
-# 4.2 Simultaneous CNA detection and subclone clustering
-
-Subclone clustering is achieved based on a GMM, and breakpoints detection is conducted by adding a fused lasso penalty term to the typical GMM model. FLCNA() R function can be used for the CNA detection and simultaneous subclone clustering. There  are two hyperparameters to be pre-defined in the FLCNA method, including the number of clusters K and the tuning parameter lambda. The tuning hyperparameter lambda is used to control the overall number of change points that less change points tend to be generated with larger lambda value. To find the optimal values of K and lambda, we use a BIC-type criterion, and the model with smallest BIC value is selected as the optimal model. 
-
-```{r, message=TRUE, warning = FALSE, eval=FALSE}
-# K: The number of clusters.
-# lambda: The tuning parameter in the penalty term, the default is 3.
-output_FLCNA <- FLCNA(K=c(3,4,5), lambda=3, Y=log2Rdata)
-```
-
-```{r, message=FALSE, warning = FALSE, echo=FALSE}
-data(output_FLCNA)
-```
-
-```{r, message=TRUE, warning = FALSE}
-# The number of clusters in the optimal model
-output_FLCNA$K.best
-```
-
-```{r, message=TRUE, warning = FALSE}
-# The estimated mean matrix for K clusters
-output_FLCNA$mu.hat.best[,1:11]
-```
-
-```{r, message=TRUE, warning = FALSE}
-# The cluster index for each cell
-output_FLCNA$s.hat.best
-table(output_FLCNA$s.hat.best)
-```
-

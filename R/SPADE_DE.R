@@ -24,10 +24,10 @@
 SPADE_DE <- function(readcounts1, readcounts2, location1, location2){ 
   
   ED1 <- as.matrix(dist(location1))
-  lrang1 <- SPARK::ComputeGaussianPL(ED1, compute_distance=FALSE)
+  lrang1 <- ComputeGaussianPL(ED1, compute_distance=FALSE)
   
   ED2 <- as.matrix(dist(location2))
-  lrang2 <- SPARK::ComputeGaussianPL(ED2, compute_distance=FALSE)
+  lrang2 <- ComputeGaussianPL(ED2, compute_distance=FALSE)
   
   # ED2 = as.matrix(dist(rbind(location, location)))
   
