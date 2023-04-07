@@ -11,6 +11,7 @@
 #' @return This function returns the statistics and P values for the test
 #' \item{GeneID}{Gene index.}
 #' \item{Q}{The Q statistics calculated using the SKAT method.}
+#' \item{lambda}{Lambda value used in chi square distribution.}
 #' \item{Pvalue}{P value calculated from the Q statistics based on the Davies method.}
 #' \item{Adjust.Pvalue}{Adjusted P values calculated with the Benjamini and Hochberg method.}
 #' 
@@ -49,7 +50,7 @@ SPADE_test <- function(object, location, para){
     
     res_each <- data.frame(geneid = rownames(object)[ig], 
                            Q=Q,
-                           lambda,
+                           lambda=lambda,
                            Pvalue=Pvalue)
     res_all <- rbind(res_all, res_each)
   }
