@@ -49,6 +49,7 @@ SPADE_test <- function(object, location, para){
     
     res_each <- data.frame(geneid = rownames(object)[ig], 
                            Q=Q,
+                           lambda,
                            Pvalue=Pvalue)
     res_all <- rbind(res_all, res_each)
   }
