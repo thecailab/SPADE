@@ -75,7 +75,7 @@ Test_res[c(1, 230),]
 
 ## Identifying SV genes between groups
 ### Data
-To illustrate how SPADE can be applied to identify SV genes between groups. A real spatial transcriptomic dataset with axolotl telencephalon (i.e., ARRISTA) was provided in the package. Two different post injury stages (i.e., 2DPI, 5DPI) were included in the dataset. This data contain three genes with 1,188 spots and 938 spots in the 2DPI group and 5DPI group, respectively.
+To illustrate how SPADE can be applied to identify SV genes between groups, a real spatial transcriptomic dataset with axolotl telencephalon (i.e., ARRISTA) was provided in the package. Two different post injury stages (i.e., 2DPI, 5DPI) were included in the dataset. This data contain three genes with 1,188 spots and 938 spots in the 2DPI group and 5DPI group, respectively.
 ```r
 data(D2_data)
 data(D2_info)
