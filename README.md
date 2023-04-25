@@ -110,3 +110,5 @@ res
 ## 2 -588.6931 27.919286739 1.264827e-07 1.897241e-07
 ## 3 329.6725 0.007881462 9.292587e-01 9.292587e-01
 ```
+
+More details about how to use SPADE package are available in [SPADE vignettes](https://github.com/thecailab/SPADE/blob/main/vignettes/SPADE.pdf).
