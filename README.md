@@ -24,9 +24,9 @@ data(info)
 readcounts <- SeqFISH
 dim(readcounts)
 dim(info)
-```
 [1] 249 131
 [1] 131   2
+```
 
 
 
