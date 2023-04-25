@@ -13,3 +13,17 @@ To identify spatially varaible (SV) genes with spatial transcriptomic data, the 
 library(devtools)
 install_github("thecailab/SPADE")
 ```
+
+## Identifying SV genes within groups
+### Data
+To help illustrate how SPADE package can be applied, the SeqFISH dataset was provided in the package with 249 genes measured on 131 spots.
+```r
+library(SPADE)
+data(SeqFISH)
+data(info)
+readcounts <- SeqFISH
+dim(readcounts)
+dim(info)
+```
+[1] 249 131
+[1] 131   2
