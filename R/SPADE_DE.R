@@ -45,8 +45,8 @@ SPADE_DE <- function(readcounts1, readcounts2, location1, location2){
     Logdelta1 <- Delta_fit(location=location1, y=y1, L=re1$minimum)
     Logdelta2 <- Delta_fit(location=location2, y=y2, L=re2$minimum)
     
-    LL10 <- LL_DE(log_delta=Logdelta1, location=location1, L=re2$minimum, y=y1)
-    LL20 <- LL_DE(log_delta=Logdelta2, location=location2, L=re1$minimum, y=y2)
+    LL10 <- LL_DE(log_delta=Logdelta2, location=location1, L=re2$minimum, y=y1)
+    LL20 <- LL_DE(log_delta=Logdelta1, location=location2, L=re1$minimum, y=y2)
     
     para[i_gene,1] <- rownames(readcounts1)[i_gene] 
     
@@ -228,11 +228,12 @@ LL_DE <- function(log_delta, location, y, L) {
   UT1 <- colSums(U)
   n <- length(y)
   
-  
   delta <- exp(log_delta)
   mu_h <- mu_hat(delta, UTy, UT1, S)
   
-  sum_1 <- sum(((UTy - UT1 * mu_h)^2) / (S + delta))
+  ss <- ((UTy - UT1 * mu_h)^2) / (S + delta)
+  
+  sum_1 <- sum(ss)
   sum_2 <- sum(log(S + delta))
   
   LL_res <- -0.5 * (n * log(2 * pi) + n * log(sum_1 / n) + sum_2 + n)
@@ -242,7 +243,7 @@ LL_DE <- function(log_delta, location, y, L) {
 
 
 
-
+# Gamma_hat <- mean(ss)
 
 
 
