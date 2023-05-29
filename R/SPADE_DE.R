@@ -6,12 +6,15 @@
 #' @param readcounts2 Read counts data for identifying spatially expressed genes in group 2. Each row is a gene and each column is a spot.
 #' @param location1 Spatial coordinates for all spots in group 1.
 #' @param location2 Spatial coordinates for all spots in group 2.
+#' @param mode Different modes for testing including 1. "Strength" to compare pattern strength, 2. "Shape" to compare pattern shapes, 3. "Shape&Strength" to compare pattern shapes and strength together.
 #' 
 #'
 #' @return This function returns the estimated parameters and some statistics of the SPADE method.
 #' \item{geneid}{Gene index.}
 #' \item{theta_Gau1}{The estimated optimal length-scale hyperparameter in the Gaussian kernel for group 1.}
 #' \item{theta_Gau2}{The estimated optimal length-scale hyperparameter in the Gaussian kernel for group 2.}
+#' \item{Gamma1}{The estimated optimal Gamma1 for group 1.}
+#' \item{Gamma2}{The estimated optimal Gamma1 for group 2.}
 #' \item{logLik11}{The corresponding log likelihood calculated with optimal hyperparameter estimated above for group 1.}
 #' \item{logLik21}{The corresponding log likelihood calculated with optimal hyperparameter estimated above for group 2.}
 #' \item{logLik10}{The log likelihood calculated with expression value from group 1 and optimal hyperparameter estimated for group 2.}
@@ -21,7 +24,7 @@
 #' \item{Adjust.Pvalue}{Adjusted P values calculated with the Benjamini and Hochberg method.}
 #'
 #' @export
-SPADE_DE <- function(readcounts1, readcounts2, location1, location2){ 
+SPADE_DE <- function(readcounts1, readcounts2, location1, location2, mode="Shape&Strength"){ 
   
   ED1 <- as.matrix(dist(location1))
   lrang1 <- ComputeGaussianPL(ED1, compute_distance=FALSE)
@@ -31,8 +34,8 @@ SPADE_DE <- function(readcounts1, readcounts2, location1, location2){
   
   # ED2 = as.matrix(dist(rbind(location, location)))
   
-  para <- matrix(NA, nrow(readcounts1), 7)
-  colnames(para) <- c("geneid","theta_Gau1", "theta_Gau2",
+  para <- matrix(NA, nrow(readcounts1), 9)
+  colnames(para) <- c("geneid","theta_Gau1", "theta_Gau2", "Gamma1", "Gamma2",
                       "logLik11","logLik21", "logLik10", "logLik20")
   for (i_gene in 1:nrow(readcounts1)){
     cat(paste("NO. Gene = ",i_gene,"\n"))
@@ -42,23 +45,41 @@ SPADE_DE <- function(readcounts1, readcounts2, location1, location2){
     re1 <- optimize(lengthscale_fit, c(lrang1[3],lrang1[8]), location=location1, y=y1, tol=1)
     re2 <- optimize(lengthscale_fit, c(lrang2[3],lrang2[8]), location=location2, y=y2, tol=1)
     
-    Logdelta1 <- Delta_fit(location=location1, y=y1, L=re1$minimum)
-    Logdelta2 <- Delta_fit(location=location2, y=y2, L=re2$minimum)
+    Est1 <- Delta_fit(location=location1, y=y1, L=re1$minimum)
+    Est2 <- Delta_fit(location=location2, y=y2, L=re2$minimum)
     
-    LL10 <- LL_DE(log_delta=Logdelta2, location=location1, L=re2$minimum, y=y1)
-    LL20 <- LL_DE(log_delta=Logdelta1, location=location2, L=re1$minimum, y=y2)
+    delta1 <- Est1$delta
+    delta2 <- Est2$delta
+    
+    Tao_hat1 <- Est1$Tao_hat
+    Tao_hat2 <- Est2$Tao_hat
+    
+    if (mode=="Shape&Strength"){
+      LL10 <- LL_DE(delta=delta2, location=location1, L=re2$minimum, y=y1)
+      LL20 <- LL_DE(delta=delta1, location=location2, L=re1$minimum, y=y2)
+    }
+    if (mode=="Shape"){
+      LL10 <- LL_DE(delta=delta1, location=location1, L=re2$minimum, y=y1)
+      LL20 <- LL_DE(delta=delta2, location=location2, L=re1$minimum, y=y2)
+    }
+    if (mode=="Strength"){
+      LL10 <- LL_DE(delta=delta2, location=location1, L=re1$minimum, y=y1)
+      LL20 <- LL_DE(delta=delta1, location=location2, L=re2$minimum, y=y2)
+    }
     
     para[i_gene,1] <- rownames(readcounts1)[i_gene] 
     
     para[i_gene,2] <- re1$minimum
     para[i_gene,3] <- re2$minimum
-    # para[i_gene,4] <- re12$minimum
     
-    para[i_gene,4] <- -re1$objective
-    para[i_gene,5] <- -re2$objective
+    para[i_gene,4] <- Tao_hat1
+    para[i_gene,5] <- Tao_hat2
     
-    para[i_gene,6] <- LL10
-    para[i_gene,7] <- LL20
+    para[i_gene,6] <- -re1$objective
+    para[i_gene,7] <- -re2$objective
+    
+    para[i_gene,8] <- LL10
+    para[i_gene,9] <- LL20
     # para[i_gene,7] <- -re12$objective
     
   }
@@ -175,8 +196,8 @@ LL_combin <- function(log_delta, UTy1, UTy2, UT1, UT2, S1, S2, n1, n2){
 #' 
 #'
 #' @return This function returns the optimal log transformed delta value.
-#' \item{results}{The optimal log delta value.}
-#' 
+#' \item{delta}{Delta in the variance function.}
+#' \item{Tao_hat}{Estimated optimal gamma value in the variance function.}
 #'
 #' @export
 Delta_fit <- function(location, y, L){
@@ -192,9 +213,15 @@ Delta_fit <- function(location, y, L){
   UTy <- t(y) %*% U
   UT1 <- colSums(U)
   n <- length(y)
-  
+
   ## Find optimal delta value
-  results <- optimize(LL, c(-10, 20), UTy=UTy, UT1=UT1, S=S, n=n)$minimum
+  log_delta <- optimize(LL, c(-10, 20), UTy=UTy, UT1=UT1, S=S, n=n)$minimum
+
+  delta <- exp(log_delta)
+  mu_h <- mu_hat(delta, UTy, UT1, S)
+  Tao_hat <- mean(log(S + delta))
+  
+  results <- data.frame(delta=delta, Tao_hat=Tao_hat)
   return(results)
 }
 
@@ -204,7 +231,7 @@ Delta_fit <- function(location, y, L){
 #'
 #' @description The log transformed multivariate normally distributed marginal likelihood . 
 #'
-#' @param log_delta Log transformed delta in the variance function.
+#' @param delta Delta in the variance function.
 #' @param location Spatial coordinates for all spots.
 #' @param y Read counts data for the gene.
 #' @param L The length-scale hyperparameter in the kernel function.
@@ -214,7 +241,7 @@ Delta_fit <- function(location, y, L){
 #' 
 #'
 #' @export
-LL_DE <- function(log_delta, location, y, L) {
+LL_DE <- function(delta, location, y, L) {
   R2 <- as.matrix(dist(location) ** 2)
   K <- exp(-R2 / (2 * L ** 2))
   
@@ -228,7 +255,7 @@ LL_DE <- function(log_delta, location, y, L) {
   UT1 <- colSums(U)
   n <- length(y)
   
-  delta <- exp(log_delta)
+  # delta <- exp(log_delta)
   mu_h <- mu_hat(delta, UTy, UT1, S)
   
   ss <- ((UTy - UT1 * mu_h)^2) / (S + delta)

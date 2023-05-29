@@ -9,6 +9,7 @@
 #' @return This function returns the estimated parameters and some statistics of the SPADE method.
 #' \item{GeneID}{Gene index.}
 #' \item{theta_Gau}{The estimated optimal length-scale hyperparameter in the Gaussian kernel}
+#' \item{Gamma_hat}{The estimated optimal Gamma_1 in the covariance function.}
 #' \item{Lik_Gau}{The log likelihood using optimal hyparameter estimated above.}
 #' 
 #'
@@ -27,9 +28,12 @@ SPADE_estimate <- function(expr_data, info){
     print(paste0("Gene ", i))
     y = expr_data[i,]
     re_Gau <- optimize(lengthscale_fit, c(lrang[3],lrang[8]), location=info, y=y, tol=1)
+    
+    Gamma_hat <- Delta_fit(location=info, y=y, L=re_Gau$minimum)$Tao_hat
+    
     # re_Per <- optimize(lengthscale_fit_Per, c(lrang[3],lrang[8]), location=info, y=y, tol=1)
     
-    final1 <- data.frame(GeneID=i, theta_Gau=re_Gau$minimum, Lik_Gau=-re_Gau$objective)
+    final1 <- data.frame(GeneID=i, theta_Gau=re_Gau$minimum, Gamma_hat=Gamma_hat, Lik_Gau=-re_Gau$objective)
     # final1 <- data.frame(GeneID=i, theta_Gau=re_Gau$minimum, Lik_Gau=-re_Gau$objective,
     #                                theta_Per=re_Per$minimum, Lik_Per=-re_Per$objective)
     final <- rbind(final, final1)
