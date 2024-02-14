@@ -15,6 +15,7 @@ SPADE_estimate(expr_data, info)
 This function returns the estimated parameters and some statistics of the SPADE method.
 \item{GeneID}{Gene index.}
 \item{theta_Gau}{The estimated optimal length-scale hyperparameter in the Gaussian kernel}
+\item{Gamma_hat}{The estimated optimal Gamma_1 in the covariance function.}
 \item{Lik_Gau}{The log likelihood using optimal hyparameter estimated above.}
 }
 \description{

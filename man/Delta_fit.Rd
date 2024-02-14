@@ -15,7 +15,8 @@ Delta_fit(location, y, L)
 }
 \value{
 This function returns the optimal log transformed delta value.
-\item{results}{The optimal log delta value.}
+\item{delta}{Delta in the variance function.}
+\item{Tao_hat}{Estimated optimal gamma value in the variance function.}
 }
 \description{
 Estimation of the optimal delta in the variance function between groups.

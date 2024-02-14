@@ -4,10 +4,10 @@
 \alias{LL_DE}
 \title{Log likelihood function}
 \usage{
-LL_DE(log_delta, location, y, L)
+LL_DE(delta, location, y, L)
 }
 \arguments{
-\item{log_delta}{Log transformed delta in the variance function.}
+\item{delta}{Delta in the variance function.}
 
 \item{location}{Spatial coordinates for all spots.}
 

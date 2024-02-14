@@ -4,7 +4,13 @@
 \alias{SPADE_DE}
 \title{SPADE estimation and test between groups}
 \usage{
-SPADE_DE(readcounts1, readcounts2, location1, location2)
+SPADE_DE(
+  readcounts1,
+  readcounts2,
+  location1,
+  location2,
+  mode = "Shape&Strength"
+)
 }
 \arguments{
 \item{readcounts1}{Read counts data for identifying spatially expressed genes in group 1. Each row is a gene and each column is a spot.}
@@ -14,12 +20,16 @@ SPADE_DE(readcounts1, readcounts2, location1, location2)
 \item{location1}{Spatial coordinates for all spots in group 1.}
 
 \item{location2}{Spatial coordinates for all spots in group 2.}
+
+\item{mode}{Different modes for testing including 1. "Strength" to compare pattern strength, 2. "Shape" to compare pattern shapes, 3. "Shape&Strength" to compare pattern shapes and strength together.}
 }
 \value{
 This function returns the estimated parameters and some statistics of the SPADE method.
 \item{geneid}{Gene index.}
 \item{theta_Gau1}{The estimated optimal length-scale hyperparameter in the Gaussian kernel for group 1.}
 \item{theta_Gau2}{The estimated optimal length-scale hyperparameter in the Gaussian kernel for group 2.}
+\item{Gamma1}{The estimated optimal Gamma1 for group 1.}
+\item{Gamma2}{The estimated optimal Gamma1 for group 2.}
 \item{logLik11}{The corresponding log likelihood calculated with optimal hyperparameter estimated above for group 1.}
 \item{logLik21}{The corresponding log likelihood calculated with optimal hyperparameter estimated above for group 2.}
 \item{logLik10}{The log likelihood calculated with expression value from group 1 and optimal hyperparameter estimated for group 2.}
