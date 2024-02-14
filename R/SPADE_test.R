@@ -17,6 +17,8 @@
 #'
 #'
 #' @export
+#' @importFrom SKAT SKAT_Null_Model
+#' @importFrom CompQuadForm davies
 SPADE_test <- function(object, location, para){
   
   ED <- as.matrix(dist(location))

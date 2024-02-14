@@ -272,8 +272,6 @@ LL_DE <- function(delta, location, y, L) {
 
 # Gamma_hat <- mean(ss)
 
-
-
 ## Combine mode: Estimating parameters for each gene in SPDE
 # SPDE_estimate_DE <- function(readcounts1, readcounts2, location1, location2){ 
 #   

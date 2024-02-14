@@ -11,6 +11,7 @@
 #' 
 #'
 #' @export
+#' @importFrom spatialDE stabilize regress_out
 SPADE_norm <- function(readcounts, info){
   stabilized <- spatialDE::stabilize(readcounts)
   info$total_counts <- colSums(readcounts)
