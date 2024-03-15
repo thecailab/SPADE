@@ -25,7 +25,7 @@ SPADE_estimate <- function(expr_data, info){
   lrang <- ComputeGaussianPL(ED, compute_distance=FALSE)
   final <- NULL
   for (i in 1:nrow(expr_data)){
-    print(paste0("Gene ", i))
+    if (i %% 20==0) cat(i,"..")
     y = expr_data[i,]
     re_Gau <- optimize(lengthscale_fit, c(lrang[3],lrang[8]), location=info, y=y, tol=1)
     
