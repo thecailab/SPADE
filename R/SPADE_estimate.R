@@ -24,6 +24,7 @@ SPADE_estimate <- function(expr_data, info){
   ED <- as.matrix(dist(info))
   lrang <- ComputeGaussianPL(ED, compute_distance=FALSE)
   final <- NULL
+  cat("NO. Gene: ")
   for (i in 1:nrow(expr_data)){
     if (i %% 20==0) cat(i,"..")
     y = expr_data[i,]
