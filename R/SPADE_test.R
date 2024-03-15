@@ -27,6 +27,7 @@ SPADE_test <- function(object, location, para){
   num_gene_test <- nrow(object)
   
   res_all <- NULL
+  cat("NO. Gene: ")
   for (ig in 1:num_gene_test){
     if (ig %% 20==0) cat(ig,"..")
 
@@ -47,8 +48,6 @@ SPADE_test <- function(object, location, para){
     
     Pvalue <- CompQuadForm::davies(Q, lambda, h=rep(1, length(lambda)))$Qq
     Pvalue
-
-    cat(paste("NO. Gene = ",ig,"\n"))
     
     res_each <- data.frame(geneid = rownames(object)[ig], 
                            Q=Q,
