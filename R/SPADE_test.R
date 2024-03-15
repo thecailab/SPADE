@@ -28,7 +28,8 @@ SPADE_test <- function(object, location, para){
   
   res_all <- NULL
   for (ig in 1:num_gene_test){
-    
+    if (ig %% 20==0) cat(ig,"..")
+
     y.c <- as.numeric(object[ig, ])
     
     K <- exp(-R2 / (2 * para$theta[ig] ** 2))
