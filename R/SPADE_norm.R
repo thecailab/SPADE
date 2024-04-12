@@ -11,11 +11,12 @@
 #' 
 #'
 #' @export
-#' @importFrom spatialDE stabilize regress_out
 SPADE_norm <- function(readcounts, info){
-  stabilized <- spatialDE::stabilize(readcounts)
-  info$total_counts <- colSums(readcounts)
-  regdata <- spatialDE::regress_out(counts=stabilized, sample_info=info)
+  NGS <- round(apply(readcounts, 2, as.numeric))
+  vst_counts <- DESeq2::varianceStabilizingTransformation(NGS)
+  info1$total_counts <- colSums(vst_counts)
+	regdata <- t(apply(vst_counts, 1, function(x){resid(lm(x ~ log(info1$total_counts)))} ))
+  rownames(regdata) <- rownames(readcounts)
   return(regdata)
 }
 
