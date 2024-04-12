@@ -13,8 +13,7 @@ Depends:
 	mvtnorm,
 	stats,
         SKAT,
-        CompQuadForm,
-               spatialDE
+        CompQuadForm
 URL: https://github.com/thecailab/SPADE
 RoxygenNote: 7.2.3
 VignetteBuilder: knitr
