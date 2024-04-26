@@ -11,6 +11,7 @@
 #' 
 #'
 #' @export
+#' @importFrom DESeq2 varianceStabilizingTransformation
 SPADE_norm <- function(readcounts, info){
   NGS <- round(apply(readcounts, 2, as.numeric))
   vst_counts <- DESeq2::varianceStabilizingTransformation(NGS)

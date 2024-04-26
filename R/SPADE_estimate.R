@@ -16,7 +16,7 @@
 #' @examples
 #' Y <- matrix(rnorm(10000, 10, 2),100, 100)
 #' info <- matrix(runif(200, 1, 100), 100, 2)
-#' output <- SPADE_estimate(expr_data=Y, info=)
+#' output <- SPADE_estimate(expr_data=Y, info=info)
 #' output
 #'
 #' @export
