@@ -19,6 +19,7 @@
 #' @export
 #' @importFrom SKAT SKAT_Null_Model
 #' @importFrom CompQuadForm davies
+#' @importFrom stats dist p.adjust
 SPADE_test <- function(object, location, para){
   
   ED <- as.matrix(dist(location))
@@ -168,3 +169,56 @@ Get_Lambda<-function(K){
 #   res_all$Adjust.Pvalue <- p.adjust(res_all$Pvalue, method = "BH")
 #   return(res_all)
 # }
+
+
+
+#' D2_data
+#'
+#' Read counts data in 2DPI group.
+#'
+#' @keywords data
+#' @name D2_data
+"D2_data"
+
+#' D2_info
+#'
+#' Coordinate data in 2DPI group.
+#'
+#' @keywords data
+#' @name D2_info
+"D2_info"
+
+#' D5_data
+#'
+#' Read counts data in 5DPI group.
+#'
+#' @keywords data
+#' @name D5_data
+"D5_data"
+
+#' D5_info
+#'
+#' Coordinates data in 5DPI group.
+#'
+#' @keywords data
+#' @name D5_info
+"D5_info"
+
+#' SeqFISH
+#'
+#' Read counts data of SeqFISH.
+#'
+#' @keywords data
+#' @name SeqFISH
+"SeqFISH"
+
+#' info
+#'
+#' Coordinate data of SeqFISH.
+#'
+#' @keywords data
+#' @name info
+"info"
+
+
+

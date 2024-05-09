@@ -24,6 +24,7 @@
 #' \item{Adjust.Pvalue}{Adjusted P values calculated with the Benjamini and Hochberg method.}
 #'
 #' @export
+#' @importFrom stats dist p.adjust optimize pchisq
 SPADE_DE <- function(readcounts1, readcounts2, location1, location2, mode="Shape&Strength"){ 
   
   ED1 <- as.matrix(dist(location1))
@@ -120,6 +121,7 @@ SPADE_DE <- function(readcounts1, readcounts2, location1, location2, mode="Shape
 #' 
 #'
 #' @export
+#' @importFrom stats dist optimize
 lengthscale_fit_DE <- function(location1, location2, y1, y2, L) {
   R1 <- as.matrix(dist(location1) ** 2)
   K1 <- exp(-R1 / (2 * L ** 2))
@@ -200,6 +202,7 @@ LL_combin <- function(log_delta, UTy1, UTy2, UT1, UT2, S1, S2, n1, n2){
 #' \item{Tao_hat}{Estimated optimal gamma value in the variance function.}
 #'
 #' @export
+#' @importFrom stats dist optimize
 Delta_fit <- function(location, y, L){
   R2 <- as.matrix(dist(location) ** 2)
   K <- exp(-R2 / (2 * L ** 2))
@@ -241,6 +244,7 @@ Delta_fit <- function(location, y, L){
 #' 
 #'
 #' @export
+#' @importFrom stats dist
 LL_DE <- function(delta, location, y, L) {
   R2 <- as.matrix(dist(location) ** 2)
   K <- exp(-R2 / (2 * L ** 2))

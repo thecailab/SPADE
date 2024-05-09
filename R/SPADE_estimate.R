@@ -20,6 +20,7 @@
 #' output
 #'
 #' @export
+#' @importFrom stats optimize dist
 SPADE_estimate <- function(expr_data, info){
   ED <- as.matrix(dist(info))
   lrang <- ComputeGaussianPL(ED, compute_distance=FALSE)
@@ -58,6 +59,7 @@ SPADE_estimate <- function(expr_data, info){
 #' 
 #'
 #' @export
+#' @importFrom stats optimize dist
 lengthscale_fit <- function(location, y, L){
   R2 <- as.matrix(dist(location) ** 2)
   K <- exp(-R2 / (2 * L ** 2))
