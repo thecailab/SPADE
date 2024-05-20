@@ -31,7 +31,7 @@ SPADE_norm <- function(readcounts, info){
 #' \item{stabilized_matrix}{The stabilized data}
 #' 
 #'
-#' @importFrom stats nls
+#' @importFrom stats nls coef var
 stabilize <- function(expression_matrix) {
   # Assumes columns are samples, and rows are genes
   
@@ -69,6 +69,7 @@ stabilize <- function(expression_matrix) {
 #' \item{regressed}{The residualized data}
 #' 
 #' @importFrom limma lmFit
+#' @importFrom stats model.matrix as.formula
 regress_out <- function(sample_info, expression_matrix, covariate_formula, design_formula = "~ 1") {
   # Ensure intercept is not part of covariates
   covariate_formula <- paste0(covariate_formula, " - 1")
