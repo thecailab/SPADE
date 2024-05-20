@@ -19,3 +19,4 @@ Encoding: UTF-8
 Language: en-GB
 Suggests: 
     rmarkdown
+biocViews: SingleCellData, SpatialData
