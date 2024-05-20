@@ -1,7 +1,7 @@
 Package: SPADE
 Type: Package
 Title: Spatially Expressed Pattern Investication Method With Spatial Transcriptomics Data
-Version: 1.0
+Version: 1.0.0
 Date: 2024-01-20
 Author: Fei Qin, Feifei Xiao, Guoshuai Cai 
 Maintainer: Fei Qin <fqin@email.sc.edu>
