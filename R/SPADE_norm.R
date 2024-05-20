@@ -13,6 +13,7 @@
 #' @export
 SPADE_norm <- function(readcounts, info){
   vst_counts <- stabilize(readcounts)
+  info1 <- info
   info1$log_total_counts <- log(info1$total_counts)
   regdata <- regress_out(info1, vst_counts, "~ log_total_counts")
   return(regdata)
