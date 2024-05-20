@@ -125,7 +125,7 @@ LL <- function(log_delta, UTy, UT1, S, n) {
 #'
 #' @export
 mu_hat <- function(delta, UTy, UT1, S) {
-  UT1_scaled <- UT1 / (S + delta)
+  UT1_scaled <- UTy / (S + delta)
   sum1 <- UT1_scaled %*% t(UTy)
   sum2 <- UT1_scaled %*% UT1
   mu_h <- sum1 / sum2
