@@ -54,13 +54,13 @@ For each gene, we estimated the optimal length-scale hyperparameter in the Gauss
 Est <- SPADE_estimate(expr_data=data_norm, info=info)
 head(Est)
  
-## GeneID theta_Gau Lik_Gau
-## 1 1 11.22829 -91.34812
-## 2 2 32.89034 -87.74524
-## 3 3 130.70081 -83.34457
-## 4 4 29.62392 -77.91255
-## 5 5 44.91683 -67.52400
-## 6 6 58.66151 -63.95050
+  GeneID theta_Gau  Gamma_hat   Lik_Gau
+1      1  11.22829  0.8796637 -91.34812
+2      2  32.89034  2.2457761 -87.74524
+3      3 130.69611 19.9999373 -83.34457
+4      4  29.62392  4.3757445 -77.91255
+5      5  44.91683  2.2771921 -67.52400
+6      6  58.66151  3.1931255 -63.95050
 ```
 ### Testing
 After the optimal length-scale hyperparameter was estimated, P-value for each gene was computed based on a quadratic score statistic with a Davies method.
@@ -68,8 +68,9 @@ After the optimal length-scale hyperparameter was estimated, P-value for each ge
 Test_res <- SPADE_test(object=data_norm, location=info, para=Est)
 Test_res[c(1, 230),]
 ## geneid Q Pvalue Adjust.Pvalue
-## 1 Tal1 65.77883 0.4434016 0.5390583
-## 230 lyve 487.63637 0.0000000 0.0000000
+    geneid         Q    Pvalue Adjust.Pvalue
+1     Tal1  65.77883 0.4434016     0.5407541
+230   lyve 487.63637 0.0000000     0.0000000
 ```
 
 ## Identifying SV genes between groups
@@ -100,14 +101,13 @@ SPADE identifies SV genes between groups based on a crossed likelihood ratio tes
 ```r
 res <- SPADE_DE(D2_norm, D5_norm, D2_info, D5_info)
 res
-## geneid theta_Gau1 theta_Gau2 logLik11 logLik21 logLik10
-## 1 AMEX60DDU001010113 49.52012 70.40230 345.6043 343.4853 314.6583
-## 2 AMEX60DDU001038720 49.63787 81.30095 -1407.1231 -574.7335 -1407.1231
-## 3 AMEX60DDU001022818 49.63787 50.10993 143.7086 329.6725 143.7047
-## logLik20 Diff Pvalue Adjust.Pvalue
-## 1 337.0464 74.769707700 5.289511e-18 1.586853e-17
-## 2 -588.6931 27.919286739 1.264827e-07 1.897241e-07
-## 3 329.6725 0.007881462 9.292587e-01 9.292587e-01
+              geneid theta_Gau1 theta_Gau2           Gamma1           Gamma2   logLik11  logLik21   logLik10
+1 AMEX60DDU001010113   49.52013   70.40230  2.0452367735223 1.52640627368895   345.6043  343.4853   279.5261
+2 AMEX60DDU001038720   49.63787   81.30095 19.9998220761637 1.33625829767921 -1407.1231 -574.7335 -1563.7369
+3 AMEX60DDU001022818   49.63787   50.10993 4.19220647492374   19.99993729622   143.7086  329.6725   143.6045
+   logLik20       Diff       Pvalue Adjust.Pvalue
+1  327.4874 164.152145 1.401280e-37  2.101920e-37
+2 -642.6539 449.068302 1.150481e-99  3.451442e-99
+3  329.1845   1.184317 2.764789e-01  2.764789e-01
 ```
 
-More details about how to use SPADE package are available in [SPADE vignettes](https://github.com/thecailab/SPADE/blob/main/vignettes/SPADE.pdf).
