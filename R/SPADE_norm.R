@@ -31,7 +31,7 @@ SPADE_norm <- function(readcounts, info){
 #' \item{stabilized_matrix}{The stabilized data}
 #' 
 #'
-#' @importFrom stats lm nls
+#' @importFrom stats nls
 stabilize <- function(expression_matrix) {
   # Assumes columns are samples, and rows are genes
   
@@ -68,7 +68,7 @@ stabilize <- function(expression_matrix) {
 #' @return This function returns the residualize data.
 #' \item{regressed}{The residualized data}
 #' 
-#' @importFrom stats lmFit
+#' @importFrom limma lmFit
 regress_out <- function(sample_info, expression_matrix, covariate_formula, design_formula = "~ 1") {
   # Ensure intercept is not part of covariates
   covariate_formula <- paste0(covariate_formula, " - 1")
@@ -81,7 +81,7 @@ regress_out <- function(sample_info, expression_matrix, covariate_formula, desig
   design_batch <- cbind(design_matrix, covariate_matrix)
   
   # Perform linear regression to find coefficients
-  fit <- lmFit(expression_matrix, design_batch)
+  fit <- limma::lmFit(expression_matrix, design_batch)
   coefficients <- fit$coefficients
   
   # Extract beta (coefficients of covariates)
