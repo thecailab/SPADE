@@ -112,8 +112,10 @@ res
 ```
 
 ## Citation
+```
  @Article{,
     author = {Fei Qin and Guoshuai Cai},
     title = {Spatial pattern and differential expression analysis with spatial transcriptomic data},
     doi = {10.5281/zenodo.13313887},
   }
+```
