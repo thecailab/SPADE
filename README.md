@@ -111,3 +111,9 @@ res
 3  329.1845   1.184317 2.764789e-01  2.764789e-01
 ```
 
+## Citation
+ @Article{,
+    author = {Fei Qin and Guoshuai Cai},
+    title = {Spatial pattern and differential expression analysis with spatial transcriptomic data},
+    doi = {10.5281/zenodo.13313887},
+  }
